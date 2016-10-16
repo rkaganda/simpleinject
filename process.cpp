@@ -140,7 +140,7 @@ BOOL Inject(
         }
         std::cout << "Inject OK \t\t0x" << hLibModule << std::endl;
 
-        if(!VirtualFreeEx(hProcess, pLibRemote, strlen(fullDllPath), MEM_RELEASE)) {
+        if(!VirtualFreeEx(hProcess, pLibRemote, strlen(fullDllPath), MEM_DECOMMIT)) {
             DisplayError("VirtualFreeEx");
             return false;
         }

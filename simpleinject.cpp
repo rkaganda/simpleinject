@@ -11,7 +11,7 @@ using namespace std;
 
 int main()
 {
-    char const* wName = "Untitled - Notepad"; //WINDOW NAME
+    char const* wName = "Simple"; //WINDOW NAME
     char* wDLLName = "simpledll.dll"; //DLL NAME
     //DWORD64 address = 0x0;
 	DWORD pid;
