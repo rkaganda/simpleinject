@@ -11,12 +11,14 @@ using namespace std;
 
 int main()
 {
-    char const* wName = "Untitled - Notepad";
+    char const* wName = "Untitled - Notepad"; //WINDOW NAME
     char* wDLLName = "simpledll.dll";
     //DWORD64 address = 0x0;
 	DWORD pid;
 	HWND hwnd;
 	HANDLE hToken;
+	cout << "Window name of process to inject dll:" << endl;
+
 	cout << "--------------" << endl;
     cout << "GETTING PROCESS \t\t" << endl;
     cout << "--------------" << endl;
