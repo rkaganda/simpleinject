@@ -1,0 +1,20 @@
+# depslib dependency file v1.0
+1476606972 source:f:\cpp_workspace\svreader\simpleinject\simpleinject.cpp
+	<iostream>
+	<windows.h>
+	<windowsx.h>
+	<stdint.h>
+	<psapi.h>
+	"util.hpp"
+	"process.hpp"
+
+1476443715 f:\cpp_workspace\svreader\simpleinject\util.hpp
+
+1476447268 f:\cpp_workspace\svreader\simpleinject\process.hpp
+
+1476605408 source:f:\cpp_workspace\svreader\simpleinject\simpleinject.rc
+
+1476443697 source:f:\cpp_workspace\svreader\simpleinject\util.cpp
+	<fstream>
+	<windows.h>
+
