@@ -2,6 +2,10 @@
 #include <iostream>
 #include <string>
 #include <psapi.h>
+#include <stdlib.h>
+
+#include <tchar.h>
+#include <stdio.h>
 
 #include "util.hpp"
 
@@ -79,30 +83,50 @@ BOOL SetPrivilege(
     return TRUE;
 }
 
-DWORD64 GetModuleBase(
-    HANDLE hProc
+DWORD64 GetModuleBaseAddress(
+    HANDLE hProc,
+    std::string &sModuleName
     )
 {
-   HMODULE *hModules = NULL;
-   char szBuf[100];
+   HMODULE hModules[1024];
    DWORD cModules;
+   char szBuf[100];
    DWORD64 dwBase = -1;
    //------
 
-   EnumProcessModules(hProc, hModules, 0, &cModules);
-   hModules = new HMODULE[cModules/sizeof(HMODULE)];
+   if(EnumProcessModules(hProc, hModules, sizeof(hModules), &cModules)) {
+      for(int i = 0; i < (int)(cModules/sizeof(HMODULE)); i++) {
+         if(GetMappedFileName(hProc, hModules[i], szBuf, sizeof(szBuf))) {
+            if(sModuleName.compare(strrchr(szBuf,'\\')+1) == 0) {
+               dwBase = (DWORD64)hModules[i];
+               break;
+            }
+         }else {
+             DisplayError("GetModuleBaseName");
+         }
+      }
+   }
+   return dwBase;
+}
+
+DWORD64 GetModuleBaseAddress(
+    HANDLE hProc
+    )
+{
+   char szBuf[100];
+   std::string moduleBaseName;
 
    if(GetProcessImageFileName(hProc, szBuf, sizeof(szBuf))) {
-    dwBase = (DWORD64)szBuf;
+    moduleBaseName = std::string(szBuf);
+    moduleBaseName = moduleBaseName.substr(moduleBaseName.find_last_of("\\")+1);
    }else {
         DisplayError("GetProcessImageFileName");
     }
 
-   delete[] hModules;
-   return dwBase;
+   return GetModuleBaseAddress(hProc,moduleBaseName);
 }
 
-BOOL Inject(
+DWORD64 Inject(
     DWORD pId,
     char *dllName
 )
@@ -140,13 +164,16 @@ BOOL Inject(
         }
         std::cout << "Inject OK \t\t0x" << hLibModule << std::endl;
 
+
         if(!VirtualFreeEx(hProcess, pLibRemote, 0, MEM_RELEASE)) {
             DisplayError("VirtualFreeEx");
             return false;
         }
         CloseHandle(hThread);
         CloseHandle(hProcess);
-        return true;
+        return hLibModule;
     }
     return false;
 }
+
+

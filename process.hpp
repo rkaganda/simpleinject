@@ -11,13 +11,22 @@ BOOL SetPrivilege(
     BOOL bEnablePrivilege   // to enable or disable privilege
     );
 
-DWORD64 GetModuleBase(
+DWORD64 GetModuleBaseAddress(
+    HANDLE hProc,
+    std::string &sModuleName
+    );
+
+DWORD64 GetModuleBaseAddress(
     HANDLE hProc
     );
 
-BOOL Inject(
+int PrintModules( DWORD processID );
+
+DWORD64 Inject(
     DWORD pId,
     char *dllName
 );
+
+
 
 #endif // PROCESS_HPP_INCLUDED
